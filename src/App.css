@@ -162,12 +162,3 @@ body {
   }
 }
 
-@media (max-width: 430px) {
-  .footer {
-    height: 50px;
-  }
-
-  .filters {
-    bottom: 10px;
-  }
-}

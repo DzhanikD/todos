@@ -4,17 +4,21 @@ import PropTypes from 'prop-types';
 import Task from '../Task';
 import './TaskList.css';
 
-function TaskList({ todos, onDeleted, onToggleDone, editingItem }) {
+function TaskList({ todos, onDeleted, onToggleDone, editingItem, playTimer, pauseTimer}) {
   const elements = todos.map((el) => (
     <Task
       id={el.id}
       key={el.id}
       completed={el.completed}
-      description={el.description}
-      created={formatDistanceToNow(el.created)}
+      title={el.title}
+      description={formatDistanceToNow(el.description)}
       onDeleted={onDeleted}
       onToggleDone={onToggleDone}
       editingItem={editingItem}
+      time={el.time}
+      playTimer={playTimer}
+      pauseTimer={pauseTimer}
+      timerID={el.timerID}
     />
   ));
   return <ul className="todo-list">{elements}</ul>;
@@ -26,13 +30,14 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   editingItem: () => {},
 };
+
 TaskList.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
-      description: PropTypes.string,
+      title: PropTypes.string,
       completed: PropTypes.bool,
-      created: PropTypes.instanceOf(Date),
+      description: PropTypes.instanceOf(Date),
     })
   ),
   onDeleted: PropTypes.func,

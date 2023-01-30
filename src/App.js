@@ -6,12 +6,53 @@ import TaskList from './components/TaskList';
 import Footer from './components/Footer';
 
 class App extends React.Component {
+
   constructor() {
     super();
 
     this.state = {
-      todos: [],
-
+      todos: [
+        {
+          title: 'таск 1',
+          completed: false,
+          description: new Date(),
+          id: crypto.randomUUID(),
+          time: 5000,
+          timerID: null
+        },
+        {
+          title: 'таск 1',
+          completed: false,
+          description: new Date(),
+          id: crypto.randomUUID(),
+          time: 5000,
+          timerID: null
+        },
+        {
+          title: 'таск 1',
+          completed: false,
+          description: new Date(),
+          id: crypto.randomUUID(),
+          time: 5000,
+          timerID: null
+        },
+        {
+          title: 'таск 1',
+          completed: false,
+          description: new Date(),
+          id: crypto.randomUUID(),
+          time: 5000,
+          timerID: null
+        },
+        {
+          title: 'таск 1',
+          completed: false,
+          description: new Date(),
+          id: crypto.randomUUID(),
+          time: 5000,
+          timerID: null
+        }
+      ],
       filter: 'all',
     };
 
@@ -22,12 +63,15 @@ class App extends React.Component {
       });
     };
 
-    this.addItem = (text) => {
+    this.addItem = (text, time) => {
       const newItem = {
         id: crypto.randomUUID(),
-        description: text,
+        title: text,
         completed: false,
-        created: new Date(),
+        description: new Date(),
+        time,
+        timerID: null
+
       };
       this.setState(({ todos }) => {
         const newArr = [...todos, newItem];
@@ -35,11 +79,12 @@ class App extends React.Component {
       });
     };
 
-    this.onToggleDone = (id) => {
+    this.onToggleDone = (id, timerID) => {
       this.setState(({ todos }) => {
+        clearInterval(timerID);
         const idx = todos.findIndex((el) => el.id === id);
         const oldItem = todos[idx];
-        const newItem = { ...oldItem, completed: !oldItem.completed };
+        const newItem = { ...oldItem, completed: !oldItem.completed, timerID: null };
         const newArray = [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)];
         return {
           todos: newArray,
@@ -51,7 +96,7 @@ class App extends React.Component {
       this.setState(({ todos }) => {
         const idx = todos.findIndex((el) => el.id === id);
         const item = todos[idx];
-        const newItem = { ...item, description: text };
+        const newItem = { ...item, title: text };
         const newArray = [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)];
 
         return {
@@ -84,6 +129,77 @@ class App extends React.Component {
           return todos;
       }
     };
+
+    // this.componentDidMount = () => {
+    //   console.log('componentDidMount');
+    // };
+
+    // this.componentDidUpdate = () => {
+    //   console.log('componentDidUpdate');
+    // };
+
+    // this.componentWillUnmount = () => {
+    //   console.log('componentWillUnmount');
+    // };
+
+
+    // let tim = null;
+
+    this.playTimer = (id, timerID) => {
+      if (timerID) return;
+      this.timerID = setInterval(() => this.updateTimer(id,), 1000); 
+      // console.log(this.timerID);
+      this.setState(({ todos }) => {
+        const idx = todos.findIndex((el) => el.id === id);
+        const item = todos[idx];
+        const newItem = { ...item, timerID: this.timerID };
+        const newArray = [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)];
+        // console.log(this.timerID);
+        return {
+          todos: newArray,
+        };
+      });
+    };
+    
+    this.pauseTimer = (timerID, id) => {
+      if (!timerID) return;
+      // console.log(timerID);
+      clearInterval(timerID);
+      this.setState(({ todos }) => {
+        const idx = todos.findIndex((el) => el.id === id);
+        const item = todos[idx];
+        const newItem = { ...item, timerID: null };
+        const newArray = [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)];
+        return {
+          todos: newArray,
+        };
+      });
+    };
+
+    this.countdown = (time, timerID) => {
+      // console.log(timerID);
+      if (time > 0) {
+        return time - 1000;
+      }
+      
+      clearInterval(timerID);
+      // console.log(time);
+      return time;
+    };
+
+    this.updateTimer = (id) => {
+      console.log(id);
+      this.setState(({todos}) => {
+        const idx = todos.findIndex((el) => el.id === id);
+        const oldItem = todos[idx];
+        const newItemTime = this.countdown(todos[idx].time, todos[idx].timerID);
+        const newItem = { ...oldItem, time:newItemTime };
+        const newArray = [...todos.slice(0, idx), newItem, ...todos.slice(idx + 1)];
+        return {
+          todos: newArray
+        };
+      });
+    };
   }
 
   render() {
@@ -102,6 +218,8 @@ class App extends React.Component {
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
             editingItem={this.editingItem}
+            playTimer={this.playTimer}
+            pauseTimer={this.pauseTimer}
           />
           <Footer
             clearCompleted={this.clearCompleted}
@@ -111,7 +229,6 @@ class App extends React.Component {
           />
         </section>
       </section>
-     
     );
   }
 }

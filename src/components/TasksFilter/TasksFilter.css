@@ -1,4 +1,4 @@
-.filters {
+/* .filters {
     margin: 0;
     padding: 0;
     list-style: none;
@@ -29,7 +29,7 @@
     border-color: rgba(175, 47, 47, 0.1);
   } */
   
-  .filters li button.selected {
+  /* .filters li button.selected {
     border-color: rgba(175, 47, 47, 0.2);
   }
 
@@ -43,4 +43,4 @@ html .clear-completed:active {
 
 .clear-completed:hover {
   text-decoration: underline;
-}
+} */ 

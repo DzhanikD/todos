@@ -40,7 +40,7 @@ export default class Task extends React.Component {
     }
 
     if (time === 0) {
-      console.log(`эй ${time}`);
+      // console.log(`эй ${time}`);
       disabled = true;
     }
     return (

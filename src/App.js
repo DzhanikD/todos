@@ -12,46 +12,46 @@ class App extends React.Component {
 
     this.state = {
       todos: [
-        {
-          title: 'таск 1',
-          completed: false,
-          description: new Date(),
-          id: crypto.randomUUID(),
-          time: 5000,
-          timerID: null
-        },
-        {
-          title: 'таск 1',
-          completed: false,
-          description: new Date(),
-          id: crypto.randomUUID(),
-          time: 5000,
-          timerID: null
-        },
-        {
-          title: 'таск 1',
-          completed: false,
-          description: new Date(),
-          id: crypto.randomUUID(),
-          time: 5000,
-          timerID: null
-        },
-        {
-          title: 'таск 1',
-          completed: false,
-          description: new Date(),
-          id: crypto.randomUUID(),
-          time: 5000,
-          timerID: null
-        },
-        {
-          title: 'таск 1',
-          completed: false,
-          description: new Date(),
-          id: crypto.randomUUID(),
-          time: 5000,
-          timerID: null
-        }
+        // {
+        //   title: 'таск 1',
+        //   completed: false,
+        //   description: new Date(),
+        //   id: crypto.randomUUID(),
+        //   time: 5000,
+        //   timerID: null
+        // },
+        // {
+        //   title: 'таск 1',
+        //   completed: false,
+        //   description: new Date(),
+        //   id: crypto.randomUUID(),
+        //   time: 5000,
+        //   timerID: null
+        // },
+        // {
+        //   title: 'таск 1',
+        //   completed: false,
+        //   description: new Date(),
+        //   id: crypto.randomUUID(),
+        //   time: 5000,
+        //   timerID: null
+        // },
+        // {
+        //   title: 'таск 1',
+        //   completed: false,
+        //   description: new Date(),
+        //   id: crypto.randomUUID(),
+        //   time: 5000,
+        //   timerID: null
+        // },
+        // {
+        //   title: 'таск 1',
+        //   completed: false,
+        //   description: new Date(),
+        //   id: crypto.randomUUID(),
+        //   time: 5000,
+        //   timerID: null
+        // }
       ],
       filter: 'all',
     };
@@ -148,7 +148,7 @@ class App extends React.Component {
     this.playTimer = (id, timerID) => {
       if (timerID) return;
       this.timerID = setInterval(() => this.updateTimer(id,), 1000); 
-      // console.log(this.timerID);
+      // console.log(`ай ди таймера${ this.timerID}`);
       this.setState(({ todos }) => {
         const idx = todos.findIndex((el) => el.id === id);
         const item = todos[idx];
@@ -188,7 +188,7 @@ class App extends React.Component {
     };
 
     this.updateTimer = (id) => {
-      console.log(id);
+      console.log(`айди туду${  id}`);
       this.setState(({todos}) => {
         const idx = todos.findIndex((el) => el.id === id);
         const oldItem = todos[idx];

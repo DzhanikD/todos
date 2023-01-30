@@ -1,6 +1,5 @@
-
 import React from 'react';
-// import { format } from 'date-fns';
+import { format } from 'date-fns';
 
 export default class Task extends React.Component {
   constructor() {
@@ -53,7 +52,7 @@ export default class Task extends React.Component {
             <span className="description">
               <button type='button' aria-label="play" className="icon icon-play" disabled = {disabled} onClick={() => playTimer(id, timerID)}/>
               <button type='button' aria-label="pause" className="icon icon-pause" disabled={disabled} onClick={() => pauseTimer(timerID, id) }/>
-              <span className='time'>{time}</span>  
+              <span className='time'>{format(new Date(time),'mm:ss')} </span>  
             </span>
             <span className="description">created {description}</span>
           </label>

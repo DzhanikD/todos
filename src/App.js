@@ -56,9 +56,10 @@ class App extends React.Component {
       filter: 'all',
     };
 
-    this.deleteItem = (id) => {
+    this.deleteItem = (id, timerID) => {
       this.setState(({ todos }) => {
         const result = todos.filter((el) => el.id !== id);
+        clearInterval(timerID);
         return { todos: result };
       });
     };

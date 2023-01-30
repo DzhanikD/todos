@@ -57,7 +57,7 @@ export default class Task extends React.Component {
             <span className="description">created {description}</span>
           </label>
           <button type="button" className="icon icon-edit" aria-label="editing" onClick={this.onClickEditing} />
-          <button type="button" className="icon icon-destroy" aria-label="deleted" onClick={() => onDeleted(id)} />
+          <button type="button" className="icon icon-destroy" aria-label="deleted" onClick={() => onDeleted(id, timerID)} />
         </div>
         <form onSubmit={this.onSubmit}>
           <input type="text" className="edit" value={title} onChange={this.onValueChange} />

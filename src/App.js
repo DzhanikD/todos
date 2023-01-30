@@ -189,7 +189,7 @@ class App extends React.Component {
     };
 
     this.updateTimer = (id) => {
-      console.log(`айди туду${  id}`);
+      // console.log(`айди туду${  id}`);
       this.setState(({todos}) => {
         const idx = todos.findIndex((el) => el.id === id);
         const oldItem = todos[idx];

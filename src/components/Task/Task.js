@@ -1,5 +1,6 @@
 import React from 'react';
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
+import './Task.css';
 
 export default class Task extends React.Component {
   constructor() {
@@ -22,6 +23,19 @@ export default class Task extends React.Component {
       e.preventDefault();
       this.setState({ editing: false });
     };
+
+    this.msToTime = (duration) => {
+      // const milliseconds = parseInt((duration % 1000) / 100);
+      let seconds = parseInt((duration / 1000) % 60, 10);
+      let minutes = parseInt((duration / (1000 * 60)) % 60, 10);
+      let hours = parseInt((duration / (1000 * 60 * 60)) % 24, 10);
+    
+      hours = (hours < 10) ? `0${  hours}` : hours;
+      minutes = (minutes < 10) ? `0${  minutes}` : minutes;
+      seconds = (seconds < 10) ? `0${  seconds}` : seconds;
+    
+      return `${hours  }:${  minutes  }:${  seconds  }`;
+    };
   }
 
   render() {
@@ -31,6 +45,12 @@ export default class Task extends React.Component {
 
     let disabled = false;
     let classNames = '';
+    let descriptions = 'description';
+
+    if (time === 0) {
+      descriptions += ' description-hidden';
+    }
+
     if (completed) {
       classNames += 'completed';
       disabled = true;
@@ -49,10 +69,10 @@ export default class Task extends React.Component {
           <input className="toggle" type="checkbox" id={id} onChange={() => onToggleDone(id, timerID)} checked={completed} />
           <label htmlFor={id}>
             <span className="title">{title}</span>
-            <span className="description">
+            <span className={descriptions}>
               <button type='button' aria-label="play" className="icon icon-play" disabled = {disabled} onClick={() => playTimer(id, timerID)}/>
               <button type='button' aria-label="pause" className="icon icon-pause" disabled={disabled} onClick={() => pauseTimer(timerID, id) }/>
-              <span className='time'>{format(new Date(time),'mm:ss')} </span>  
+              <span className='time'>{this.msToTime(time)}</span>  
             </span>
             <span className="description">created {description}</span>
           </label>

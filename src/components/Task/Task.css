@@ -1,0 +1,19 @@
+.icon-pause:after {
+	content: '⏸';
+}
+
+.icon-play:after {
+	content: '▶';
+}
+
+.todo-count {
+	text-align: left;
+}
+
+.description-hidden {
+	display: none;
+}
+
+.todo-count strong {
+	font-weight: 300;
+}

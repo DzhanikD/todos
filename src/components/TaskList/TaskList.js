@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Task from '../Task';
 import './TaskList.css';
 
-function TaskList({ todos, onDeleted, onToggleDone, editingItem, playTimer, pauseTimer}) {
+function TaskList({ todos, onDeleted, onToggleDone, editingItem, playTimer, pauseTimer, onkeyEsc }) {
   const elements = todos.map((el) => (
     <Task
       id={el.id}
@@ -19,6 +19,7 @@ function TaskList({ todos, onDeleted, onToggleDone, editingItem, playTimer, paus
       playTimer={playTimer}
       pauseTimer={pauseTimer}
       timerID={el.timerID}
+      onkeyEsc={onkeyEsc}
     />
   ));
   return <ul className="todo-list">{elements}</ul>;

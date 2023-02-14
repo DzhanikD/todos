@@ -1,132 +1,131 @@
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './Task.css';
+import cn from 'classnames';
 
-export default class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.textInput = React.createRef();
+function Task({
+  title,
+  description,
+  onDeleted,
+  onToggleDone,
+  completed,
+  id,
+  time,
+  playTimer,
+  pauseTimer,
+  timerID,
+  editingItem,
+}) {
+  const textInput = useRef();
 
-    this.state = {
-      editing: false,
-      oldValue: '',
-    };
+  const [editing, setEditing] = useState(false);
+  const [oldValue, setOldValue] = useState('');
 
-    this.componentDidUpdate = () => {
-      this.textInput.current.focus();
-    };
-    this.componentWillUnmount = () => {};
+  useEffect(() => {
+    textInput.current.focus();
+  });
 
-    this.onClickEditing = () => {
-      const { title } = this.props;
-      this.setState({ editing: true, oldValue: title });
-    };
+  const onClickEditing = () => {
+    setEditing(true);
+    setOldValue(title);
+  };
 
-    this.onValueChange = (e) => {
-      const { editingItem, id } = this.props;
-      editingItem(e.target.value, id);
-    };
+  const onValueChange = (e) => {
+    editingItem(e.target.value, id);
+  };
 
-    this.onSubmit = (e) => {
-      e.preventDefault();
-      this.setState({ editing: false });
-    };
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setEditing(false);
+  };
 
-    this.onkeyEsc = (e) => {
-      const { editingItem, id } = this.props;
-      const { oldValue } = this.state;
-      if (e.code === 'Escape') {
-        this.setState({ editing: false });
-        editingItem(oldValue, id);
-      }
-    };
+  const onkeyEsc = (e) => {
+    if (e.code === 'Escape') {
+      setEditing(false);
+      editingItem(oldValue, id);
+    }
+  };
 
-    this.msToTime = (duration) => {
-      let seconds = parseInt((duration / 1000) % 60, 10);
-      let minutes = parseInt((duration / (1000 * 60)) % 60, 10);
-      let hours = parseInt((duration / (1000 * 60 * 60)) % 24, 10);
+  const msToTime = (duration) => {
+    let seconds = parseInt((duration / 1000) % 60, 10);
+    let minutes = parseInt((duration / (1000 * 60)) % 60, 10);
+    let hours = parseInt((duration / (1000 * 60 * 60)) % 24, 10);
 
-      hours = hours < 10 ? `0${hours}` : hours;
-      minutes = minutes < 10 ? `0${minutes}` : minutes;
-      seconds = seconds < 10 ? `0${seconds}` : seconds;
+    hours = hours < 10 ? `0${hours}` : hours;
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
 
-      return `${hours}:${minutes}:${seconds}`;
-    };
+    return `${hours}:${minutes}:${seconds}`;
+  };
+
+  let disabled = false;
+
+  const descriptions = cn('description', {
+    'description-hidden': time === 0,
+  });
+
+  const classNames = cn({
+    completed,
+    editing,
+  });
+
+  if (completed) {
+    disabled = true;
   }
 
-  render() {
-    const { title, description, onDeleted, onToggleDone, completed, id, time, playTimer, pauseTimer, timerID } =
-      this.props;
-    const { editing } = this.state;
-
-    let disabled = false;
-    let classNames = '';
-    let descriptions = 'description';
-
-    if (time === 0) {
-      descriptions += ' description-hidden';
-    }
-
-    if (completed) {
-      classNames += 'completed';
-      disabled = true;
-    }
-    if (editing) {
-      classNames += ' editing';
-    }
-
-    if (time === 0) {
-      disabled = true;
-    }
-    return (
-      <li className={classNames}>
-        <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            id={id}
-            onChange={() => onToggleDone(id, timerID)}
-            checked={completed}
-          />
-          <label htmlFor={id}>
-            <span className="title">{title}</span>
-            <span className={descriptions}>
-              <button
-                type="button"
-                aria-label="play"
-                className="icon icon-play"
-                disabled={disabled}
-                onClick={() => playTimer(id, timerID)}
-              />
-              <button
-                type="button"
-                aria-label="pause"
-                className="icon icon-pause"
-                disabled={disabled}
-                onClick={() => pauseTimer(timerID, id)}
-              />
-              <span className="time">{this.msToTime(time)}</span>
-            </span>
-            <span className="description">created {description}</span>
-          </label>
-          <button type="button" className="icon icon-edit" aria-label="editing" onClick={this.onClickEditing} />
-          <button
-            type="button"
-            className="icon icon-destroy"
-            aria-label="deleted"
-            onClick={() => onDeleted(id, timerID)}
-          />
-        </div>
-        <form onSubmit={this.onSubmit}>
-          <input
-            type="text"
-            className="edit"
-            ref={this.textInput}
-            value={title}
-            onChange={(e) => this.onValueChange(e)}
-            onKeyDown={(e) => this.onkeyEsc(e)}
-          />
-        </form>
-      </li>
-    );
+  if (time === 0) {
+    disabled = true;
   }
+  return (
+    <li className={classNames}>
+      <div className="view">
+        <input
+          className="toggle"
+          type="checkbox"
+          id={id}
+          onChange={() => onToggleDone(id, timerID)}
+          checked={completed}
+        />
+        <label htmlFor={id}>
+          <span className="title">{title}</span>
+          <span className={descriptions}>
+            <button
+              type="button"
+              aria-label="play"
+              className="icon icon-play"
+              disabled={disabled}
+              onClick={() => playTimer(id, timerID)}
+            />
+            <button
+              type="button"
+              aria-label="pause"
+              className="icon icon-pause"
+              disabled={disabled}
+              onClick={() => pauseTimer(timerID, id)}
+            />
+            <span className="time">{msToTime(time)}</span>
+          </span>
+          <span className="description">created {description}</span>
+        </label>
+        <button type="button" className="icon icon-edit" aria-label="editing" onClick={onClickEditing} />
+        <button
+          type="button"
+          className="icon icon-destroy"
+          aria-label="deleted"
+          onClick={() => onDeleted(id, timerID)}
+        />
+      </div>
+      <form onSubmit={onSubmit}>
+        <input
+          type="text"
+          className="edit"
+          ref={textInput}
+          value={title}
+          onChange={(e) => onValueChange(e)}
+          onKeyDown={(e) => onkeyEsc(e)}
+        />
+      </form>
+    </li>
+  );
 }
+
+export default Task;
